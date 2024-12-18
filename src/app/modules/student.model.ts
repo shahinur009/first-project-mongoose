@@ -5,6 +5,7 @@ import {
   UserName,
 } from "./student/student.interface";
 import { Schema, model } from "mongoose";
+import validator from "validator";
 
 const UserNameSchema = new Schema<UserName>({
   firstName: {
@@ -17,6 +18,10 @@ const UserNameSchema = new Schema<UserName>({
   lastName: {
     type: String,
     required: [true, "Last Name is Required"],
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: "{VALUE} is not valid",
+    },
   },
 });
 
@@ -59,6 +64,7 @@ const LocalGuardianSchema = new Schema<LocalGuardian>({
   contactNo: {
     type: String,
     required: [true, "Local Guardian Contact Number Is Required"],
+    maxlength: [15, "Local Guardian Contact Number can not more than 15"],
   },
   address: {
     type: String,
@@ -71,6 +77,13 @@ const studentSchema = new Schema<Student>({
   name: {
     type: UserNameSchema,
     required: [true, "User Name Is Required"],
+    validate: {
+      validator: function (value) {
+        const firstNameStr = value.chartAt(0).toUpperCase() + value.slice(1);
+        return firstNameStr === value;
+      },
+      message: "{VALUE} is not in capitalize format",
+    },
   },
   gender: {
     type: String,
@@ -89,6 +102,8 @@ const studentSchema = new Schema<Student>({
   contactNos: {
     type: String,
     required: [true, "User Contact Number Is Required"],
+    trim: true,
+    maxlength: [15, "User Contact Number can not more than 15"],
   },
   emergencyContactNo: {
     type: String,
