@@ -79,12 +79,13 @@ const studentSchema = new Schema<Student>({
     required: [true, "User Name Is Required"],
     validate: {
       validator: function (value) {
-        const firstNameStr = value.chartAt(0).toUpperCase() + value.slice(1);
-        return firstNameStr === value;
+        const firstNameStr = value.firstName.charAt(0).toUpperCase() + value.firstName.slice(1);
+        return firstNameStr === value.firstName;
       },
       message: "{VALUE} is not in capitalize format",
     },
   },
+  
   gender: {
     type: String,
     enum: {
