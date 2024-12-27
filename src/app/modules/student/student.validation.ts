@@ -41,12 +41,12 @@ const LocalGuardianValidationSchema = z.object({
 // Main Student schema
 const StudentValidationSchema = z.object({
   id: z.string().min(1, "ID is required"),
+  password: z.string().max(20, "Password is required"),
   name: UserNameValidationSchema,
   gender: z.enum(["male", "female", "other"]),
   dateOfBirth: z.string().optional(),
   email: z.string().email("Invalid email format").min(1, "Email is required"),
-  contactNos: z
-    .string().min(11, "Contact number is required"),
+  contactNos: z.string().min(11, "Contact number is required"),
   emergencyContactNo: z.string().min(1, "Emergency Contact Number is required"),
   bloodGroup: z.enum(["A+", "A-", "AB+", "AB-", "B+", "B-", "O+", "O-"], {
     invalid_type_error: `Blood Group must be one of: "A+", "A-", "AB+", "AB-", "B+", "B-", "O+", "O-"`,
@@ -61,6 +61,7 @@ const StudentValidationSchema = z.object({
       invalid_type_error: "Status must be 'active' or 'blocked'",
     })
     .default("active"),
+  isDeleted: z.boolean(),
 });
 
 export default StudentValidationSchema;
